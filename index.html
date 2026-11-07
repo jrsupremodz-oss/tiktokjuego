@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impresora Holográfica TikTok Live VIP</title>
+  <style>
+    :root {
+      --bg-dark: #080a10;
+      --card-bg: rgba(20, 25, 45, 0.9);
+      --neon-pink: #ff007f;
+      --neon-cyan: #00f3ff;
+      --neon-gold: #ffd700;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: #fff;
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    /* Panel Lateral de Simulación */
+    #control-panel {
+      width: 320px;
+      background: #101422;
+      border-right: 2px solid #232a40;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 100;
+      box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    input, select, button {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: white;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--neon-pink), #8b5cf6);
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 5px;
+      box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.5);
+    }
+
+    .info-box {
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: #cbd5e1;
+    }
+
+    /* Escena Principal del Live */
+    #stream-stage {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #030712 100%);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: hidden;
+    }
+
+    /* Marco de la Impresora 3D */
+    .printer-container {
+      width: 440px;
+      height: 100%;
+      position: relative;
+      background: rgba(15, 23, 42, 0.7);
+      border-left: 3px solid #334155;
+      border-right: 3px solid #334155;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Cabezal e Hilo Láser */
+    .laser-head {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), #ffffff, var(--neon-pink), transparent);
+      box-shadow: 0 0 15px var(--neon-cyan), 0 0 25px var(--neon-pink);
+      z-index: 20;
+      transition: top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Papel impreso cayendo */
+    .print-feed {
+      width: 100%;
+      height: 100%;
+      padding-top: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      overflow: hidden;
+    }
+
+    /* Tarjetas Impresas */
+    .print-card {
+      width: 360px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      animation: slidePrint 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      position: relative;
+      backdrop-filter: blur(12px);
+    }
+
+    .print-card.tier-1 { /* Rosa */
+      border-color: #ff4757;
+      box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+    }
+
+    .print-card.tier-2 { /* Donut / Neón */
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+    }
+
+    .print-card.tier-3 { /* León / VIP */
+      border-color: var(--neon-gold);
+      background: linear-gradient(135deg, rgba(45, 30, 10, 0.95), rgba(15, 23, 42, 0.95));
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #fff;
+      flex-shrink: 0;
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .username {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .gift-badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      width: fit-content;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tier-1 .gift-badge { background: #ff4757; color: #fff; }
+    .tier-2 .gift-badge { background: var(--neon-cyan); color: #000; }
+    .tier-3 .gift-badge { background: var(--neon-gold); color: #000; }
+
+    .vip-tag {
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      background: linear-gradient(45deg, #ffd700, #ff8c00);
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 3px 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    @keyframes slidePrint {
+      0% {
+        opacity: 0;
+        transform: translateY(-90px) scale(0.85);
+        filter: brightness(2) blur(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: brightness(1) blur(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANEL DE PRUEBAS -->
+  <div id="control-panel">
+    <h2>Simulador de En Vivo</h2>
+    <div class="info-box">
+      <strong>¿Cómo probarlo?</strong><br>
+      Escribe un nombre, selecciona el regalo y presiona <strong>"Simular Donación"</strong> para ver cómo se imprime la cara del usuario.
+    </div>
+
+    <div class="form-group">
+      <label>Nombre del Usuario:</label>
+      <input type="text" id="sim-name" value="Carlos_Gamer">
+    </div>
+
+    <div class="form-group">
+      <label>Tipo de Regalo:</label>
+      <select id="sim-gift">
+        <option value="1">🌹 Rosa (Impresión Básica)</option>
+        <option value="2">🍩 Donut (Impresión Cyan Neón)</option>
+        <option value="3">🦁 León / Universo (Impresión VIP Dorado)</option>
+      </select>
+    </div>
+
+    <button onclick="simulateGift()">¡Simular Donación!</button>
+  </div>
+
+  <!-- PANTALLA PRINCIPAL QUE SE MUESTRA EN EL EN VIVO -->
+  <div id="stream-stage">
+    <div class="printer-container">
+      <div class="laser-head" id="laser"></div>
+      <div class="print-feed" id="feed">
+        <!-- Las fotos impresas caerán aquí -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fotos aleatorias para simulación manual
+    const sampleAvatars = [
+      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+      'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'
+    ];
+
+    // FUNCIÓN DE IMPRESIÓN
+    function imprimirFoto(nombre, avatarUrl, tier, giftName = 'Rosa') {
+      const laser = document.getElementById('laser');
+      laser.style.top = '50px';
+      setTimeout(() => { laser.style.top = '130px'; }, 100);
+      setTimeout(() => { laser.style.top = '50px'; }, 350);
+
+      const feed = document.getElementById('feed');
+      const card = document.createElement('div');
+      
+      let tierClass = 'tier-1';
+      let giftText = `🌹 ${giftName}`;
+      let vipBadge = '';
+
+      if (tier === 2 || tier === '2') {
+        tierClass = 'tier-2';
+        giftText = `🍩 ${giftName}`;
+      } else if (tier === 3 || tier === '3') {
+        tierClass = 'tier-3';
+        giftText = `👑 VIP: ${giftName}`;
+        vipBadge = '<div class="vip-tag">DONADOR TOP</div>';
+      }
+
+      card.className = `print-card ${tierClass}`;
+      card.innerHTML = `
+        ${vipBadge}
+        <div class="avatar-wrapper">
+          <img src="${avatarUrl}" alt="avatar" onerror="this.src='https://placehold.co/150x150/101422/ffffff?text=User'">
+        </div>
+        <div class="user-details">
+          <div class="username">@${nombre}</div>
+          <div class="gift-badge">${giftText}</div>
+        </div>
+      `;
+
+      feed.insertBefore(card, feed.firstChild);
+
+      if (feed.children.length > 5) {
+        feed.removeChild(feed.lastChild);
+      }
+    }
+
+    // SIMULADOR MANUAL (Para probar sin TikTok en vivo)
+    function simulateGift() {
+      const name = document.getElementById('sim-name').value || 'Espectador';
+      const tier = document.getElementById('sim-gift').value;
+      const randomImg = sampleAvatars[Math.floor(Math.random() * sampleAvatars.length)];
+      imprimirFoto(name, randomImg, tier, 'Regalo Simulado');
+    }
+
+    // CONEXIÓN AUTOMÁTICA AL SCRIPT LOCAL (WEBSOCKET)
+    function iniciarConexionLocal() {
+      // Se conecta a la PC local en el puerto 8080
+      const ws = new WebSocket('ws://localhost:8080');
+
+      ws.onopen = () => {
+        console.log('✅ Conectado al script local de TikTok Live');
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          // Cuando llega una donación desde TikTok:
+          if (data.tipo === 'DONACION') {
+            imprimirFoto(data.usuario, data.foto, data.tier, data.regalo);
+          }
+        } catch (e) {
+          console.error("Error leyendo datos del script local", e);
+        }
+      };
+
+      ws.onclose = () => {
+        console.log('⚠️ Reintentando conexión con el script local en 3 segundos...');
+        setTimeout(iniciarConexionLocal, 3000);
+      };
+    }
+
+    window.onload = () => {
+      setTimeout(simulateGift, 600);
+      iniciarConexionLocal(); // Iniciar escucha en segundo plano
+    };
+  </script>
+</body>
+</html>
